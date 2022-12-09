@@ -20,8 +20,12 @@
  *    console.log(r.height);      // => 20
  *    console.log(r.getArea());   // => 200
  */
-function Rectangle(/* width, height */) {
-  throw new Error('Not implemented');
+function Rectangle(width, height) {
+  this.width = width;
+  this.height = height;
+  this.getArea = function getArea() {
+    return this.width * this.height;
+  };
 }
 
 
@@ -35,8 +39,8 @@ function Rectangle(/* width, height */) {
  *    [1,2,3]   =>  '[1,2,3]'
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
-function getJSON(/* obj */) {
-  throw new Error('Not implemented');
+function getJSON(obj) {
+  return JSON.stringify(obj);
 }
 
 
@@ -51,8 +55,10 @@ function getJSON(/* obj */) {
  *    const r = fromJSON(Circle.prototype, '{"radius":10}');
  *
  */
-function fromJSON(/* proto, json */) {
-  throw new Error('Not implemented');
+function fromJSON(proto, json) {
+  const obj = JSON.parse(json);
+  Object.setPrototypeOf(obj, proto);
+  return obj;
 }
 
 
@@ -111,6 +117,75 @@ function fromJSON(/* proto, json */) {
  */
 
 const cssSelectorBuilder = {
+  // selectors: '',
+  // ids: 0,
+  // pseudoElements: 0,
+
+  // element(value) {
+  //   const obj = Object.create(cssSelectorBuilder);
+  //   obj.selectors = this.selectors + value;
+  //   obj.ids = this.ids;
+  //   obj.pseudoElements = this.pseudoElements;
+  //   return obj;
+  // },
+
+  // id(value) {
+  //   const obj = Object.create(cssSelectorBuilder);
+  //   obj.selectors = `${this.selectors}#${value}`;
+  //   obj.ids = this.ids + 1;
+  //   obj.pseudoElements = this.pseudoElements;
+  //   return obj;
+  // },
+
+  // class(value) {
+  //   const obj = Object.create(cssSelectorBuilder);
+  //   obj.selectors = `${this.selectors}.${value}`;
+  //   obj.ids = this.ids;
+  //   obj.pseudoElements = this.pseudoElements;
+  //   return obj;
+  // },
+
+  // attr(value) {
+  //   const obj = Object.create(cssSelectorBuilder);
+  //   obj.selectors = `${this.selectors}[${value}]`;
+  //   obj.ids = this.ids;
+  //   obj.pseudoElements = this.pseudoElements;
+  //   return obj;
+  // },
+
+  // pseudoClass(value) {
+  //   const obj = Object.create(cssSelectorBuilder);
+  //   obj.selectors = `${this.selectors}:${value}`;
+  //   obj.ids = this.ids;
+  //   obj.pseudoElements = this.pseudoElements;
+  //   return obj;
+  // },
+
+  // pseudoElement(value) {
+  //   const obj = Object.create(cssSelectorBuilder);
+  //   obj.selectors = `${this.selectors}::${value}`;
+  //   obj.pseudoElements = this.pseudoElements + 1;
+  //   obj.ids = this.ids;
+  //   obj.pseudoElements = this.pseudoElements;
+  //   return obj;
+  // },
+
+  // combine(selector1, combinator, selector2) {
+  //   const obj = Object.create(cssSelectorBuilder);
+  //   obj.selectors = `${selector1.selectors} ${combinator} ${selector2.selectors}`;
+  //   obj.ids = selector1.ids + selector2.ids;
+  //   obj.pseudoElements = selector1.pseudoElements + selector2.pseudoElements;
+  //   return obj;
+  // },
+
+  // stringify() {
+  //   console.log('end>', this.ids, this.pseudoElements);
+  //   if (this.ids > 1 || this.pseudoElements > 1) {
+  //     throw new Error(`Element, id and pseudo-element should not
+  //     occur more then one time inside the selector`);
+  //   }
+  //   return this.selectors;
+  // },
   element(/* value */) {
     throw new Error('Not implemented');
   },
