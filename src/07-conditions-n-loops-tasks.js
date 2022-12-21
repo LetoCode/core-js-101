@@ -308,8 +308,10 @@ function isCreditCardNumber(ccn) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  const operate = num.toString().split('').reduce((acc, el) => acc + +el, 0);
+  if (operate.toString().length === 1) { return operate; }
+  return getDigitalRoot(operate);
 }
 
 
@@ -334,8 +336,28 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const brackets = {
+    ']': '[',
+    '}': '{',
+    ')': '(',
+    '>': '<',
+  };
+
+  const stack = [];
+  for (let i = 0; i < str.length; i += 1) {
+    const strI = str[i];
+    if (Object.prototype.hasOwnProperty.call(brackets, strI)) {
+      if (stack.at(-1) === brackets[strI]) {
+        stack.pop();
+      } else {
+        stack.push(strI);
+      }
+    } else {
+      stack.push(strI);
+    }
+  }
+  return !stack.length;
 }
 
 
@@ -359,8 +381,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return num.toString(n);
 }
 
 
@@ -376,10 +398,31 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
-}
+function getCommonDirectoryPath(pathes) {
+  function getArr(arr) {
+    const start = (arr[0] === '/' ? 1 : 0);
+    const end = (arr.at(-1) === '/' ? -2 : -1);
+    const res = arr.split('/').slice(start, end);
+    if (start === 1) { res.unshift('/'); }
+    return res;
+  }
 
+  if (pathes.length === 1) {
+    let res = pathes[0];
+    if (res.slice(0, 2) === '//') { res = `${res.slice(1)}/`; }
+    return res;
+  }
+  const path1 = getArr(pathes[0]);
+  const path2 = getArr(pathes[1]);
+  const acc = [];
+  for (let i = 0; i < path1.length; i += 1) {
+    if (path1[i] === path2[i]) { acc.push(path1[i]); }
+  }
+  const el = `${acc.join('/')}`;
+  const newPathes = pathes.slice(2);
+  newPathes.push(el);
+  return getCommonDirectoryPath(newPathes);
+}
 
 /**
  * Returns the product of two specified matrixes.
@@ -399,8 +442,21 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const sum = [];
+  const colCount = m2[0].length;
+  for (let mI = 0; mI < m1.length; mI += 1) {
+    const str = [];
+    for (let col = 0; col < colCount; col += 1) {
+      let elem = 0;
+      for (let i = 0; i < m1[mI].length; i += 1) {
+        elem += m1[mI][i] * m2[i][col];
+      }
+      str.push(elem);
+    }
+    sum.push(str);
+  }
+  return sum;
 }
 
 
@@ -434,8 +490,77 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  let res;
+  let checkX;
+  let checkY;
+  // check rows
+  for (let x = 0; x <= 2; x += 1) {
+    checkX = [];
+    checkY = [];
+    for (let y = 0; y <= 2; y += 1) {
+      if (position[x][y] === '0') {
+        checkY.push(1);
+      }
+      if (position[x][y] === 'X') {
+        checkX.push(1);
+      }
+    }
+    if (checkX.length === 3 || checkY.length === 3) { x = 3; }
+  }
+
+  if (checkX.length === 3) { res = 'X'; return res; }
+  if (checkY.length === 3) { res = '0'; return res; }
+
+  // check cols
+  for (let y = 0; y <= 2; y += 1) {
+    checkX = [];
+    checkY = [];
+    for (let x = 0; x <= 2; x += 1) {
+      if (position[x][y] === '0') {
+        checkY.push(1);
+      }
+      if (position[x][y] === 'X') {
+        checkX.push(1);
+      }
+    }
+    if (checkX.length === 3 || checkY.length === 3) { y = 3; }
+  }
+
+  if (checkX.length === 3) { res = 'X'; return res; }
+  if (checkY.length === 3) { res = '0'; return res; }
+
+  // check cross left
+  checkX = [];
+  checkY = [];
+  for (let x = 0; x <= 2; x += 1) {
+    const y = x;
+    if (position[x][y] === '0') {
+      checkY.push(1);
+    }
+    if (position[x][y] === 'X') {
+      checkX.push(1);
+    }
+  }
+  if (checkX.length === 3) { res = 'X'; return res; }
+  if (checkY.length === 3) { res = '0'; return res; }
+
+  // check cross right
+  checkX = [];
+  checkY = [];
+  for (let x = 0; x <= 2; x += 1) {
+    const y = 2 - x;
+    if (position[x][y] === '0') {
+      checkY.push(1);
+    }
+    if (position[x][y] === 'X') {
+      checkX.push(1);
+    }
+  }
+  if (checkX.length === 3) { res = 'X'; return res; }
+  if (checkY.length === 3) { res = '0'; return res; }
+
+  return res;
 }
 
 
